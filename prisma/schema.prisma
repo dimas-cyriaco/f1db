@@ -7,13 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Pilot {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+model Person {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  Contract  Contract[]
+  createdAt DateTime   @default(now())
   name      String
+  updatedAt DateTime   @updatedAt
+
+  @@index([name])
+}
+
+model Team {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   createdAt DateTime @default(now())
+  name      String
   updatedAt DateTime @updatedAt
 
   @@index([name])
+}
+
+model Contract {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  endedAt      DateTime
+  person       Person               @relation(fields: [personId], references: [id])
+  personId     String               @db.ObjectId
+  positionType ContractPositionType
+  startedAt    DateTime
+}
+
+enum ContractPositionType {
+  Pilot
+  Engineer
+  TeamPrincipal
 }
 
 // Necessary for Next auth
