@@ -1,0 +1,46 @@
+import { type inferProcedureInput } from '@trpc/server'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { faker } from '@faker-js/faker'
+
+import { type AppRouter } from '~/server/api/root'
+import { db } from '~/server/db'
+import { getTestAPI, type TestRouterCaller } from 'test/trpc/context'
+import { type {{pascalCase name}} } from '@prisma/client'
+
+// import { server } from "@/mocks/node";
+
+// server.listen();
+
+type Input = inferProcedureInput<AppRouter["{{name}}"]["create"]>;
+
+describe("{{name}} Router", () => {
+  let api: TestRouterCaller
+
+  beforeEach(async () => {
+    api = await getTestAPI()
+
+    await db.{{name}}.deleteMany();
+  });
+
+  it("create", async () => {
+    // Arrange
+
+    const name = faker.person.fullName()
+
+    const input: Input = {
+      name,
+    }
+
+    // Act
+
+    const result: {{pascalCase name}} = await api.{{name}}.create(input);
+
+    // Assert
+
+    const expected = {
+      name,
+    }
+
+    expect(result).toMatchObject(expected);
+  });
+});
